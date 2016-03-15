@@ -1,6 +1,6 @@
 {
     "name": "netinteractive/view",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "Extension for Laravel viiw",
     "authors": [
         {
@@ -10,7 +10,7 @@
     ],
     "require": {
         "php": ">=5.4.0",
-        "illuminate/support": "5.1.*"
+        "illuminate/support": "5.2.*"
     },
     "autoload": {
         "psr-0": {
