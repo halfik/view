@@ -1,6 +1,49 @@
-Paczka pozwala uzywac skórki dla widokow.
+Netinteractive\View
+===================
 
-##Prykład użycia
+Paczka nadpisujemy domyslny mechanizm widoku. Dodaje mechanizm do obslugi skorek widokow z podzialem na frontend i backend.
+
+Domyslne ladowane sa widoki dla skorki default. Skorke mozna zmienic na poziomie nazwy widoku.
+
+Domyslna skorka default:
+        Route::get('/',
+            array(
+                'as' => 'IndexController@index',
+                'uses' => function (){
+                    $params = \Input::all();
+                    $params['view'] = 'frontend.index';
+        
+                    return \Utils::runAction('IndexController@index', $params);
+                }
+            )
+        );
+        
+Ze skorka red:
+    
+    Route::get('/',
+        array(
+            'as' => 'IndexController@index',
+            'uses' => function (){
+                $params = \Input::all();
+                $params['view'] = 'red.frontend.index';
+    
+                return \Utils::runAction('IndexController@index', $params);
+            }
+        )
+    );
+
+
+Jesli widok nie istnieje dla wskazanej skorki, mechanim przeszuka inne skorki w poszukiwaniu odpowiedniego widoku.
+Kolejnosc przeszukiwania skorek zalezy od kolejnosci definicji skorek w pliku konfguracyjnym view.php
+
+
+## Changelog
+
+* 1.0.2:
+        
+        Calkowity refactoring \Netinteractive\View\Factory
+
+##Przykład użycia
 **config/view.php**
     
     'skin'=>array(
@@ -8,12 +51,13 @@ Paczka pozwala uzywac skórki dla widokow.
         'backend' => 'default'
     ),
     
-**resources/views/frontend/default/index.blade.php**
-**resources/views/frontend/red/index.blade.php**
+**resources/views/default/frontend/index.blade.php**
+**resources/views/red/frontend/index.blade.php**
 
     view(frontend.index)
     
-najpierw sprawdzi czy istnieje widok **resources/views/frontend/red/index.blade.php** i jak nie to uzyje **resources/views/frontend/red/index.blade.php**
+Najpierw sprawdzi czy istnieje widok **resources/views/default/frontend/index.blade.php** i jak nie to uzyje **resources/views/red/frontend/index.blade.php**
+lub widoku index.blade.php z innej skorki (zaleznie od kolejnosci deklaracji skorek w konfigu).
     
 
 
