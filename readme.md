@@ -39,7 +39,7 @@ Kolejnosc przeszukiwania skorek zalezy od kolejnosci definicji skorek w pliku ko
 
 ## Changelog
 
-* 1.0.2:
+* 1.0.2 - 1.0.3:
         
         Calkowity refactoring \Netinteractive\View\Factory
 

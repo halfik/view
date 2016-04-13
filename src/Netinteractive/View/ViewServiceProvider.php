@@ -4,6 +4,36 @@ namespace Netinteractive\View;
 
 class ViewServiceProvider extends \Illuminate\View\ViewServiceProvider
 {
+
+    /**
+     * Bootstrap the application events.
+     *
+     * @return void
+     */
+    public function boot()
+    {
+        parent::boot();
+
+        $this->publishes([
+            __DIR__.'/../../config/config.php' => config_path('/packages/netinteractive/view/config.php'),
+        ], 'config');
+    }
+
+    /**
+     * Register the service provider.
+     *
+     * @return void
+     */
+    public function register()
+    {
+
+        $config = realpath(__DIR__ . '/../../config/config.php');
+
+        $this->mergeConfigFrom($config, 'packages.netinteractive.view.config');
+
+        parent::register();
+    }
+
     /**
      * Register the view environment.
      *

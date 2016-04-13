@@ -1,13 +1,15 @@
 <?php namespace Netinteractive\View;
 
+use \Illuminate\View\Engines\EngineResolver;
+use \Illuminate\View\ViewFinderInterface;
+use \Illuminate\Contracts\Events\Dispatcher;
+
 /**
  * Class Factory
  * @package Netinteractive\View
  */
 class Factory extends \Illuminate\View\Factory
 {
-    public static $DEFAULT_SKIN = 'default';
-
     protected $mode;
     protected $view;
     protected $skin;
@@ -16,10 +18,82 @@ class Factory extends \Illuminate\View\Factory
     /**
      * @var array
      */
-    public static $avaibleModes = array(
-        'frontend',
-        'backend'
-    );
+    public static $MODES;
+    public static $SKINS;
+    public static $DEFAULT_SKIN;
+    public static $CURRENT_SKIN;
+
+
+    /**
+     * Create a new view factory instance.
+     *
+     * @param  \Illuminate\View\Engines\EngineResolver  $engines
+     * @param  \Illuminate\View\ViewFinderInterface  $finder
+     * @param  \Illuminate\Contracts\Events\Dispatcher  $events
+     * @return void
+     */
+    public function __construct(EngineResolver $engines, ViewFinderInterface $finder, Dispatcher $events)
+    {
+        parent::__construct($engines, $finder, $events);
+
+        self::$MODES = \Config::get('packages.netinteractive.view.config.modes');
+        self::$SKINS = \Config::get('packages.netinteractive.view.config.skins.list');
+        self::$DEFAULT_SKIN = \Config::get('packages.netinteractive.view.config.skins.default');
+
+        if (!self::$CURRENT_SKIN){
+            self::$CURRENT_SKIN = \Config::get('packages.netinteractive.view.config.skins.default');
+        }
+    }
+
+    /**
+     * Returns skins list
+     * @return mixed
+     */
+    public static function getSkins()
+    {
+        return static::$SKINS;
+    }
+
+    /**
+     * Returns modes list
+     * @return array
+     */
+    public static function getModes()
+    {
+        return static::$MODES;
+    }
+
+    /**
+     * Returns default skin
+     * @return array
+     */
+    public static function getDefaultSkin()
+    {
+        return static::$DEFAULT_SKIN;
+    }
+
+    /**
+     * Returns current skin
+     * @return array
+     */
+    public static function getCurrentSkin()
+    {
+        return static::$CURRENT_SKIN;
+    }
+
+    /**
+     * Sets current skin
+     * @throws \Exception
+     * @return array
+     */
+    public static function setCurrentSkin($skin)
+    {
+        if (!in_array($skin, static::$SKINS)){
+            throw new \Exception( sprintf(_("Skin %s not avaible!"), $skin) );
+        }
+        static::$CURRENT_SKIN = $skin;
+    }
+
 
     /**
      * @param string $view
@@ -37,13 +111,7 @@ class Factory extends \Illuminate\View\Factory
 
         #jesli widok nie istnieje dla aktualnego skina, to  przeszukujemy pozostale skiny
         if(!$this->hasViewPath()) {
-            #Pobieramy z konfigu liste skinow i przeszukujemy
-            $skinList = \Config::get('view.skin.'.$this->getMode());
-            if(!is_array($skinList)){
-                $skinList = array($skinList);
-            }
-
-            foreach($skinList as $s){
+            foreach(static::getSkins() as $s){
                 $this->buildViewPath($s);
                 if($this->hasViewPath()) {
                     $this->setSkin($s);
@@ -55,7 +123,7 @@ class Factory extends \Illuminate\View\Factory
         if ($this->hasViewPath()){
             $view = $this->getViewPath();
         }
-
+        
         return parent::make($view, $data, $mergeData);
     }
 
@@ -66,7 +134,17 @@ class Factory extends \Illuminate\View\Factory
      */
     public function isMode($mode)
     {
-        return in_array($mode, self::$avaibleModes);
+        return in_array($mode, static::getModes());
+    }
+
+    /**
+     * Metoda sprawdza, czy podany string jest skinem
+     * @param string $skin
+     * @return bool
+     */
+    public function isSkin($skin)
+    {
+        return in_array($skin, static::getSkins());
     }
 
     /**
@@ -116,23 +194,24 @@ class Factory extends \Illuminate\View\Factory
     protected function parseViewParts($view)
     {
         $viewParts = explode('.',$view);
-        $skin = self::$DEFAULT_SKIN;;
+        $skin = static::getCurrentSkin();
         $view = null;
         $mode = null;
 
-
-
-        #mamy skina, mode oraz view
-        if ( count($viewParts) == 3){
-            $skin = array_shift($viewParts);
-        }
-
-        #mode oraz widok
-        if ( count($viewParts) == 2 ){
-            if ($this->isMode($viewParts[0])){
-                $mode = array_shift($viewParts);
+        #mozliwe, ze w nazwie widoku, mamy mode wioku oraz skina
+        if (count($viewParts) >= 2){
+            for($i=0; $i<count($viewParts); $i++){
+                if ( $this->isSkin($viewParts[$i]) ){
+                    $skin = $viewParts[$i];
+                    unset($viewParts[$i]);
+                }
+                else if ( $this->isMode($viewParts[$i]) ){
+                    $mode = $viewParts[$i];
+                    unset($viewParts[$i]);
+                }
             }
         }
+
 
         $view = implode('.',$viewParts);
 
