@@ -172,7 +172,7 @@ class Factory extends \Illuminate\View\Factory
         }else{
             $viewPath = $skin.'.'.$this->getView();
         }
-
+        
         if($this->exists($viewPath)){
             $this->setViewPath($viewPath);
         }
