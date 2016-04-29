@@ -17,6 +17,8 @@ class ViewServiceProvider extends \Illuminate\View\ViewServiceProvider
         $this->publishes([
             __DIR__.'/../../config/config.php' => config_path('/packages/netinteractive/view/config.php'),
         ], 'config');
+
+        $this->setUpRouting();
     }
 
     /**
@@ -32,6 +34,18 @@ class ViewServiceProvider extends \Illuminate\View\ViewServiceProvider
         $this->mergeConfigFrom($config, 'packages.netinteractive.view.config');
 
         parent::register();
+    }
+
+    /**
+     * Routing
+     */
+    protected function setUpRouting()
+    {
+        $routePath = __DIR__.'/Http/routes.php';
+
+        if (!$this->app->routesAreCached()) {
+            require $routePath;
+        }
     }
 
     /**
