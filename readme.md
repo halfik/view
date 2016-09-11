@@ -38,7 +38,7 @@ Kolejnosc przeszukiwania skorek zalezy od kolejnosci definicji skorek w pliku ko
 
 
 ## Changelog
-* 1.0.6
+* 1.0.6 - 1.0.7
     composer.json fix
 
 * 1.0.5

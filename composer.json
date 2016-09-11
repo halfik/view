@@ -1,6 +1,6 @@
 {
     "name": "netinteractive/view",
-    "version": "1.0.6",
+    "version": "1.0.7",
     "description": "Extension for Laravel view",
     "authors": [
         {
@@ -14,7 +14,7 @@
     ],
     "require": {
         "php": ">=5.4.0",
-        "illuminate/support": "5.2.*",
+        "illuminate/support": ">=5.2.0",
         "netinteractive/http": ">=1.0.0"
     },
     "autoload": {
