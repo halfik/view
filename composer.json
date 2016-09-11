@@ -1,7 +1,7 @@
 {
     "name": "netinteractive/view",
-    "version": "1.0.5",
-    "description": "Extension for Laravel viiw",
+    "version": "1.0.6",
+    "description": "Extension for Laravel view",
     "authors": [
         {
             "name": "Michal Shapowalow",
@@ -15,7 +15,7 @@
     "require": {
         "php": ">=5.4.0",
         "illuminate/support": "5.2.*",
-        "netinteractive/http": ">=1.0.0",
+        "netinteractive/http": ">=1.0.0"
     },
     "autoload": {
         "psr-0": {

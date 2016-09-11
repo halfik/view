@@ -38,6 +38,8 @@ Kolejnosc przeszukiwania skorek zalezy od kolejnosci definicji skorek w pliku ko
 
 
 ## Changelog
+* 1.0.6
+    composer.json fix
 
 * 1.0.5
     Dodano routing, ktory buduje i zwraca widoki (na potrzeby klientow frontowych).
