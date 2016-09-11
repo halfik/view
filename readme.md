@@ -38,15 +38,12 @@ Kolejnosc przeszukiwania skorek zalezy od kolejnosci definicji skorek w pliku ko
 
 
 ## Changelog
+
+* 1.0.8
+    * fixed: ViewServiceProvider::boot
+
 * 1.0.6 - 1.0.7
     composer.json fix
-
-* 1.0.5
-    Dodano routing, ktory buduje i zwraca widoki (na potrzeby klientow frontowych).
-
-* 1.0.2 - 1.0.4
-        
-        Calkowity refactoring \Netinteractive\View\Factory
 
 ##Przykład użycia
 **config/view.php**

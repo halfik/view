@@ -12,8 +12,6 @@ class ViewServiceProvider extends \Illuminate\View\ViewServiceProvider
      */
     public function boot()
     {
-        parent::boot();
-
         $this->publishes([
             __DIR__.'/../../config/config.php' => config_path('/packages/netinteractive/view/config.php'),
         ], 'config');

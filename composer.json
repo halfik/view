@@ -1,6 +1,6 @@
 {
     "name": "netinteractive/view",
-    "version": "1.0.7",
+    "version": "1.0.8",
     "description": "Extension for Laravel view",
     "authors": [
         {
